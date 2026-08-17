@@ -13,7 +13,6 @@ permissions:
 
 jobs:
   ios:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     strategy:
       fail-fast: false
       matrix:
@@ -25,7 +24,6 @@ jobs:
       bundleMode: ${{ matrix.bundleMode }}
 
   android:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     strategy:
       fail-fast: false
       matrix:

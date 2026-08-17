@@ -27,7 +27,6 @@ permissions:
 
 jobs:
   changes:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     runs-on: ubuntu-latest
     outputs:
       ts-apps: ${{ steps.matrix.outputs.ts-apps }}

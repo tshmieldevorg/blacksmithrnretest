@@ -44,7 +44,6 @@ permissions:
 
 jobs:
   apple-validation:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false

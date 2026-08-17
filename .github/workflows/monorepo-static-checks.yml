@@ -23,7 +23,6 @@ permissions:
 
 jobs:
   monorepo-static-checks:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     runs-on: ubuntu-latest
     concurrency:
       group: monorepo-static-checks-${{ github.ref }}

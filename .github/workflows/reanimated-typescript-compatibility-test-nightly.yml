@@ -15,7 +15,6 @@ permissions:
 
 jobs:
   read-compatibility-json:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     runs-on: ubuntu-latest
     outputs:
       react-native-versions-with-nightly: ${{ steps.set-outputs.outputs.react-native-versions-with-nightly }}
@@ -40,7 +39,6 @@ jobs:
 
   reanimated-typescript-compatibility-test-nightly:
     needs: read-compatibility-json
-    if: github.repository == 'software-mansion/react-native-reanimated'
     runs-on: ubuntu-latest
     strategy:
       matrix:

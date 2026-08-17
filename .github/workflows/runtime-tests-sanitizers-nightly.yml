@@ -14,7 +14,6 @@ permissions:
 
 jobs:
   ios-tsan:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     uses: ./.github/workflows/runtime-tests-ios.yml
     with:
       configuration: ReleaseRuntimeTests
@@ -22,7 +21,6 @@ jobs:
       sanitizer: thread
 
   ios-asan:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     uses: ./.github/workflows/runtime-tests-ios.yml
     with:
       configuration: ReleaseRuntimeTests

@@ -20,7 +20,6 @@ permissions:
 
 jobs:
   example-tvos-build-check:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     runs-on: macos-26
     env:
       WORKING_DIRECTORY: apps/tvos-example

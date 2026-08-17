@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   github-issue-repro-check:
-    if: ${{ github.repository == 'software-mansion/react-native-reanimated' && !contains(github.event.issue.labels.*.name, 'Maintainer issue') }}
+    if: ${{ !contains(github.event.issue.labels.*.name, 'Maintainer issue') }}
     runs-on: ubuntu-latest
     concurrency:
       group: needs-repro-${{ github.event.issue.number }}

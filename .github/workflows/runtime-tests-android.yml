@@ -34,7 +34,6 @@ permissions:
 
 jobs:
   runtime-tests-android:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     name: ${{ matrix.bundleMode && 'Bundle Mode' || 'Legacy Eval' }}
     runs-on: ubuntu-latest
     timeout-minutes: 90

@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   read-bundle-cost-matrix:
-    if: github.repository == 'software-mansion/react-native-reanimated' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-outputs.outputs.matrix }}
@@ -43,7 +43,7 @@ jobs:
         run: echo "matrix=$(cat /tmp/bundle-cost-matrix.json)" >> "$GITHUB_OUTPUT"
 
   measure-bundle-cost:
-    if: github.repository == 'software-mansion/react-native-reanimated' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     needs: read-bundle-cost-matrix
     strategy:
@@ -150,7 +150,7 @@ jobs:
           path: /tmp/bundle-cost-results/*.json
 
   daily-status-report:
-    if: ${{ always() && github.repository == 'software-mansion/react-native-reanimated' && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
+    if: ${{ always() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
     runs-on: ubuntu-latest
     needs: [read-bundle-cost-matrix, measure-bundle-cost]
     permissions:
@@ -188,7 +188,7 @@ jobs:
         run: node --experimental-strip-types .github/workflows/helper/daily-report-notification.ts
 
   issue-opened-report:
-    if: github.repository == 'software-mansion/react-native-reanimated' && github.event_name == 'issues'
+    if: github.event_name == 'issues'
     runs-on: ubuntu-latest
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -213,7 +213,6 @@ jobs:
 
   pull-request-opened-report:
     if: >-
-      github.repository == 'software-mansion/react-native-reanimated' &&
       github.event_name == 'pull_request_target' &&
       github.event.pull_request.user.type != 'Bot' &&
       github.event.pull_request.author_association != 'OWNER' &&
