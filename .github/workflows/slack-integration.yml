@@ -17,7 +17,7 @@ permissions:
 jobs:
   read-bundle-cost-matrix:
     if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       matrix: ${{ steps.set-outputs.outputs.matrix }}
     steps:
@@ -44,7 +44,7 @@ jobs:
 
   measure-bundle-cost:
     if: (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     needs: read-bundle-cost-matrix
     strategy:
       fail-fast: false
@@ -151,7 +151,7 @@ jobs:
 
   daily-status-report:
     if: ${{ always() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     needs: [read-bundle-cost-matrix, measure-bundle-cost]
     permissions:
       contents: read
@@ -189,7 +189,7 @@ jobs:
 
   issue-opened-report:
     if: github.event_name == 'issues'
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     env:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
@@ -218,7 +218,7 @@ jobs:
       github.event.pull_request.author_association != 'OWNER' &&
       github.event.pull_request.author_association != 'MEMBER' &&
       github.event.pull_request.author_association != 'COLLABORATOR'
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     permissions:
       contents: read
     env:

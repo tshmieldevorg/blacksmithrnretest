@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   example-tvos-build-check:
-    runs-on: macos-26
+    runs-on: blacksmith-6vcpu-macos-26
     env:
       WORKING_DIRECTORY: apps/tvos-example
       REANIMATED_DIR: packages/react-native-reanimated

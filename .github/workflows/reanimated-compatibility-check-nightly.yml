@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   read-compatibility-json:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       react-native-versions: ${{ steps.set-outputs.outputs.react-native-versions }}
     steps:

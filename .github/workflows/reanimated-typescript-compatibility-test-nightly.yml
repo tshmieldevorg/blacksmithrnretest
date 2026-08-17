@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   read-compatibility-json:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       react-native-versions-with-nightly: ${{ steps.set-outputs.outputs.react-native-versions-with-nightly }}
     steps:
@@ -39,7 +39,7 @@ jobs:
 
   reanimated-typescript-compatibility-test-nightly:
     needs: read-compatibility-json
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     strategy:
       matrix:
         react-native-version: ${{ fromJson(needs.read-compatibility-json.outputs.react-native-versions-with-nightly) }}

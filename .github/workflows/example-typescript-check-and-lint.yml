@@ -27,7 +27,7 @@ permissions:
 
 jobs:
   changes:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       ts-apps: ${{ steps.matrix.outputs.ts-apps }}
       web: ${{ steps.matrix.outputs.web }}
@@ -101,7 +101,7 @@ jobs:
   build-packages:
     needs: changes
     if: needs.changes.outputs.ts-apps != '[]' || needs.changes.outputs.web == 'true'
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     concurrency:
       group: typescript-build-${{ github.ref }}
       cancel-in-progress: true
@@ -132,7 +132,7 @@ jobs:
   example-typescript-check-and-lint:
     needs: [changes, build-packages]
     if: needs.changes.outputs.ts-apps != '[]'
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     strategy:
       matrix:
         working-directory: ${{ fromJSON(needs.changes.outputs.ts-apps) }}
@@ -165,7 +165,7 @@ jobs:
   example-web-build:
     needs: [changes, build-packages]
     if: needs.changes.outputs.web == 'true'
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     concurrency:
       group: typescript-web-example-${{ github.ref }}
       cancel-in-progress: true

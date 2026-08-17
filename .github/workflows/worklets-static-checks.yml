@@ -17,7 +17,7 @@ permissions:
 
 jobs:
   worklets-static-checks:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     concurrency:
       group: worklets-static-checks-${{ github.ref }}
       cancel-in-progress: true

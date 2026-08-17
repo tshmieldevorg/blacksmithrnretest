@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   example-next-build-check-and-test:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     concurrency:
       group: build-next-example-${{ github.ref }}
       cancel-in-progress: true

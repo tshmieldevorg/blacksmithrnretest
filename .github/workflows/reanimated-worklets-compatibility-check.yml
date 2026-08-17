@@ -24,7 +24,7 @@ permissions:
 
 jobs:
   read-compatibility-json:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       matrix: ${{ steps.set-outputs.outputs.matrix }}
       matrix-size: ${{ steps.set-outputs.outputs.matrix-size }}
@@ -53,7 +53,7 @@ jobs:
           echo "matrix-size=$(jq 'length' /tmp/reanimated-worklets-matrix.json)" >> "$GITHUB_OUTPUT"
 
   reanimated-worklets-compatibility-check-android:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     needs: read-compatibility-json
     strategy:
       fail-fast: false
@@ -117,7 +117,7 @@ jobs:
           key: reanimated-worklets-compat-android-${{ env.CACHE_KEY }}
 
   reanimated-worklets-compatibility-check-ios:
-    runs-on: macos-26
+    runs-on: blacksmith-6vcpu-macos-26
     needs: read-compatibility-json
     strategy:
       fail-fast: false
