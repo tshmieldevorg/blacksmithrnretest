@@ -23,15 +23,16 @@ permissions:
 
 jobs:
   babel-plugin-static-check:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     strategy:
       fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
             bundle_output: /dev/null
+            is_windows: false
           - os: blacksmith-4vcpu-windows-2025
             bundle_output: 'NUL'
+            is_windows: true
     runs-on: ${{ matrix.os }}
     concurrency:
       group: babel-plugin-static-check-${{ matrix.os }}-${{ github.ref }}
@@ -54,23 +55,23 @@ jobs:
       - name: Install monorepo dependencies
         run: yarn install --immutable
       - name: Build Worklets
-        if: matrix.os != 'windows-latest'
+        if: ${{ !matrix.is_windows }}
         working-directory: ${{ env.WORKLETS_DIR }}
         run: yarn build
 
       - name: Diff
         id: diff
-        if: matrix.os != 'windows-latest'
+        if: ${{ !matrix.is_windows }}
         run: git update-index --refresh && git diff-index --quiet HEAD --
       - name: Show diff
         if: failure() && steps.diff.outcome == 'failure'
         run: git diff
       - name: Check types
-        if: matrix.os != 'windows-latest'
+        if: ${{ !matrix.is_windows }}
         working-directory: ${{ env.PLUGIN_DIR }}
         run: yarn type:check
       - name: Lint and format
-        if: matrix.os != 'windows-latest'
+        if: ${{ !matrix.is_windows }}
         working-directory: ${{ env.PLUGIN_DIR }}
         run: yarn lint
 

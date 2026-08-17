@@ -1,6 +1,10 @@
 name: Reanimated TypeScript compatibility test [Nightly]
 env:
   YARN_ENABLE_HARDENED_MODE: 0
+  # This workflow resolves `react-native@nightly`, which pulls in packages that
+  # were published minutes ago, so the repository's 8 day age gate would
+  # quarantine them and fail resolution.
+  YARN_NPM_MINIMAL_AGE_GATE: 0
 on:
   pull_request:
     paths:
@@ -15,7 +19,6 @@ permissions:
 
 jobs:
   read-compatibility-json:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       react-native-versions-with-nightly: ${{ steps.set-outputs.outputs.react-native-versions-with-nightly }}
@@ -40,7 +43,6 @@ jobs:
 
   reanimated-typescript-compatibility-test-nightly:
     needs: read-compatibility-json
-    if: github.repository == 'software-mansion/react-native-reanimated'
     runs-on: blacksmith-4vcpu-ubuntu-2404
     strategy:
       matrix:

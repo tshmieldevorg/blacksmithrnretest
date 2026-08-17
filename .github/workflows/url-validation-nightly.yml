@@ -15,7 +15,6 @@ permissions:
 
 jobs:
   url-validation-nightly:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Checkout repository

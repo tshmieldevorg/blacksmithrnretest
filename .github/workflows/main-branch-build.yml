@@ -13,7 +13,6 @@ permissions:
 
 jobs:
   android:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     strategy:
       fail-fast: false
       matrix:
@@ -23,7 +22,6 @@ jobs:
       configuration: ${{ matrix.configuration }}
 
   ios:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     strategy:
       fail-fast: false
       matrix:
@@ -36,7 +34,6 @@ jobs:
   # React Native 0.83. Re-enable once react-native-macos catches up.
 
   tvos:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     strategy:
       fail-fast: false
       matrix:

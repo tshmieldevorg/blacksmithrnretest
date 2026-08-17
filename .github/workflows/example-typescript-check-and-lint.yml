@@ -27,7 +27,6 @@ permissions:
 
 jobs:
   changes:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       ts-apps: ${{ steps.matrix.outputs.ts-apps }}
@@ -146,6 +145,7 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
+          node-version-file: '.nvmrc'
           cache: 'yarn'
       - name: Clear annotations
         run: .github/workflows/helper/clear-annotations.sh

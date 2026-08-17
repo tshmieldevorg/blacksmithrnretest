@@ -46,7 +46,6 @@ permissions:
 
 jobs:
   example-android-build-check:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     runs-on: blacksmith-4vcpu-ubuntu-2404
     env:
       WORKING_DIRECTORY: apps/fabric-example

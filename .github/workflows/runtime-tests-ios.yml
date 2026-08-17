@@ -42,7 +42,6 @@ permissions:
 
 jobs:
   runtime-tests-ios:
-    if: github.repository == 'software-mansion/react-native-reanimated'
     name: ${{ matrix.bundleMode && 'Bundle Mode' || 'Legacy Eval' }}
     runs-on: blacksmith-6vcpu-macos-26
     timeout-minutes: ${{ inputs.sanitizer && 240 || 90 }}
