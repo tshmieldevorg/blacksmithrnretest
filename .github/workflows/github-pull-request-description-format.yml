@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   github-pull-request-description-format:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     steps:
       - name: Update PR Description
         uses: software-mansion-labs/pr-description@5d5cc919c7628544433cf034cdae4e53cb86a67c
