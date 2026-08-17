@@ -25,7 +25,7 @@ class RetainingSerializableStore {
 
   struct Slot {
     std::atomic<jsi::Runtime *> runtime{nullptr};
-    jsi::Value value{jsi::Value::undefined()};
+    std::unique_ptr<jsi::Value> value{};
   };
 
   std::array<Slot, kSlotsPerChunk> slots_{};
@@ -36,7 +36,7 @@ class RetainingSerializableStore {
   const jsi::Value *find(jsi::Runtime *rt) {
     for (auto &slot : slots_) {
       if (slot.runtime.load(std::memory_order_acquire) == rt) {
-        return &slot.value;
+        return slot.value.get();
       }
     }
     if (auto *next = nextChunk_.load(std::memory_order_acquire)) {
@@ -45,7 +45,7 @@ class RetainingSerializableStore {
     return nullptr;
   }
 
-  void store(jsi::Runtime *rt, jsi::Value value) {
+  void store(jsi::Runtime *rt, std::unique_ptr<jsi::Value> value) {
     for (auto &slot : slots_) {
       if (slot.runtime.load(std::memory_order_relaxed) != nullptr) {
         continue;
@@ -72,13 +72,26 @@ class RetainingSerializableStore {
  public:
   RetainingSerializableStore() = default;
 
+  /**
+   * The store outlives the runtimes it caches values for, and it can be
+   * destroyed from any thread, including a runtime's GC thread. Releasing the
+   * cached values through the runtime-aware cleanup takes the runtime registry
+   * lock and skips ~jsi::Value for runtimes that are already gone, since
+   * running it would touch memory owned by a terminated runtime.
+   */
+  ~RetainingSerializableStore() {
+    for (auto &slot : slots_) {
+      cleanupRuntimeAware(slot.runtime.load(std::memory_order_acquire), slot.value);
+    }
+  }
+
   jsi::Value getOrStore(jsi::Runtime &rt, TSerializable &serializable) {
     if (const auto *cachedValue = find(&rt)) {
       return jsi::Value(rt, *cachedValue);
     }
 
     auto jsValue = serializable.TSerializable::toJSValue(rt);
-    store(&rt, jsi::Value(rt, jsValue));
+    store(&rt, std::make_unique<jsi::Value>(rt, jsValue));
 
     return jsValue;
   }
@@ -88,16 +101,29 @@ template <typename TSerializable>
   requires std::is_base_of_v<Serializable, TSerializable>
 class RetainingSerializable : virtual public TSerializable {
  private:
+  jsi::Runtime *primaryRuntime_;
   std::unique_ptr<RetainingSerializableStore<TSerializable>> store_{
       std::make_unique<RetainingSerializableStore<TSerializable>>()};
 
  public:
   template <typename... Args>
-  explicit RetainingSerializable(jsi::Runtime &rt, Args &&...args) : TSerializable(rt, std::forward<Args>(args)...) {}
+  explicit RetainingSerializable(jsi::Runtime &rt, Args &&...args)
+      : TSerializable(rt, std::forward<Args>(args)...), primaryRuntime_(&rt) {}
 
   ~RetainingSerializable() override = default;
 
   jsi::Value toJSValue(jsi::Runtime &rt) override {
+    if (&rt == primaryRuntime_) {
+      /**
+       * The serializable is kept alive by a JSI object of the runtime it was
+       * created on, so caching a value of that runtime here would form a cycle
+       * that only its garbage collector can break. The cached value would then
+       * be released from the collector's sweeper thread, where ~jsi::Value
+       * crashes.
+       */
+      return TSerializable::toJSValue(rt);
+    }
+
     return store_->getOrStore(rt, *this);
   }
 };
