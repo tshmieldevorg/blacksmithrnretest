@@ -43,7 +43,7 @@ permissions:
 jobs:
   android-validation:
     if: github.repository == 'software-mansion/react-native-reanimated'
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     strategy:
       fail-fast: false
       matrix:

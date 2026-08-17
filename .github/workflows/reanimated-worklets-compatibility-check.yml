@@ -25,7 +25,7 @@ permissions:
 jobs:
   read-compatibility-json:
     if: github.repository == 'software-mansion/react-native-reanimated'
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       matrix: ${{ steps.set-outputs.outputs.matrix }}
       matrix-size: ${{ steps.set-outputs.outputs.matrix-size }}
@@ -55,7 +55,7 @@ jobs:
 
   reanimated-worklets-compatibility-check-android:
     if: github.repository == 'software-mansion/react-native-reanimated'
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     needs: read-compatibility-json
     strategy:
       fail-fast: false
@@ -120,7 +120,7 @@ jobs:
 
   reanimated-worklets-compatibility-check-ios:
     if: github.repository == 'software-mansion/react-native-reanimated'
-    runs-on: macos-26
+    runs-on: blacksmith-6vcpu-macos-26
     needs: read-compatibility-json
     strategy:
       fail-fast: false

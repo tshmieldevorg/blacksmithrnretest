@@ -30,7 +30,7 @@ jobs:
         include:
           - os: ubuntu-latest
             bundle_output: /dev/null
-          - os: windows-latest
+          - os: blacksmith-4vcpu-windows-2025
             bundle_output: 'NUL'
     runs-on: ${{ matrix.os }}
     concurrency:
