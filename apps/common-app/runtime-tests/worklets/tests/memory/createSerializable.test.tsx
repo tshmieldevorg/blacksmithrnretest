@@ -661,7 +661,7 @@ describe('Test createSerializable', () => {
 });
 
 const RUNTIME_COUNT = 5;
-const SERIALIZABLE_COUNT = 999;
+const SERIALIZABLE_COUNT = 1000;
 const PAYLOAD_ROW_COUNT = 24;
 const PAYLOAD_COLUMN_COUNT = 16;
 
