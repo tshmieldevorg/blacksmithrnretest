@@ -1,6 +1,10 @@
 name: Reanimated TypeScript compatibility test [Nightly]
 env:
   YARN_ENABLE_HARDENED_MODE: 0
+  # This workflow resolves `react-native@nightly`, which pulls in packages that
+  # were published minutes ago, so the repository's 8 day age gate would
+  # quarantine them and fail resolution.
+  YARN_NPM_MINIMAL_AGE_GATE: 0
 on:
   pull_request:
     paths:
